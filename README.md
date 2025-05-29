@@ -11,10 +11,9 @@ Open scripts and such
     ```
 3. Make it executable:
     ```
-    chmod +x setup-hyperv.sh
-    ./setup-hyperv.sh
+    chmod +x alpine-vm-setup-hyperv.sh
     ```
 4. Execute
     ```
-    ./setup-hyperv.sh
+    ./alpine-vm-setup-hyperv.sh
     ```
