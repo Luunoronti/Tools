@@ -42,3 +42,9 @@ Open scripts and such
    sudo mv /bin/nano /bin/nano.original
    sudo ln -s /usr/local/bin/edit /bin/nano
    ```
+
+# Change Ubunty MotD (Message of the Day):
+1. Edit file
+   ```
+   edit /etc/update-motd.d/10-help-text
+   ```
