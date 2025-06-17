@@ -43,7 +43,7 @@ Open scripts and such
    sudo ln -s /usr/local/bin/edit /bin/nano
    ```
 
-# Change Ubunty MotD (Message of the Day):
+# Change Ubuntu MotD (Message of the Day):
 1. Edit file
    ```
    edit /etc/update-motd.d/10-help-text
