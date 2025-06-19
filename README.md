@@ -48,3 +48,19 @@ Open scripts and such
    ```
    edit /etc/update-motd.d/10-help-text
    ```
+
+
+# Global build number in TeamCity
+
+This solution works for me:
+
+1. Create Build Configuration.
+Let say "GenerateBuildNumber", do not attach template. Do not specify any build steps. Click Save.
+
+2. Edit configuration for your project.
+Go to "Build Configuration Settings->Dependencies". Click "Add new snapshot dependecy".
+Select previously created "GenerateBuildNumber" in "Depend on" section. Uncheck option "Do not run new build if there is a suitable one". Click Save.
+
+3. Go to "General Settings", clear "Build number format:", click the button on the left side with 3 lines. Select "%dep.YouProjName_GenerateBuildNumber.env.BUILD_NUMBER%". Click Save.
+ 
+4. Run your project build. Firstly it should start "GenerateBuildNumber" project then your project with a generated number. Do the steps 2-4 for every project you want to have unique generated number. Profit!
