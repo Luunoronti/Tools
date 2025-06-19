@@ -24,24 +24,36 @@ Open scripts and such
    ```
    wget https://github.com/microsoft/edit/releases/download/v1.2.0/edit-1.2.0-x86_64-linux-gnu.tar.zst
    ```
-3. Unpack (may require tgz support)
+2. Unpack (may require tgz support)
    ```
    sudo apt install zstd
    tar --zstd -xvf edit-1.2.0-x86_64-linux-gnu.tar.zst
    ```
-5. Make it executable
+3. Make it executable
    ```
    chmod +x edit
    ```
-7. Move to bin
+4. Move to bin
    ```
    sudo mv edit /usr/local/bin/
    ```
-9. (optional) change nano to run edit
+5. (optional) change nano to run edit
    ```
    sudo mv /bin/nano /bin/nano.original
    sudo ln -s /usr/local/bin/edit /bin/nano
    ```
+
+Full Script:
+   ```
+   wget https://github.com/microsoft/edit/releases/download/v1.2.0/edit-1.2.0-x86_64-linux-gnu.tar.zst
+   sudo apt install zstd
+   tar --zstd -xvf edit-1.2.0-x86_64-linux-gnu.tar.zst
+   chmod +x edit
+   sudo mv edit /usr/local/bin/
+   sudo mv /bin/nano /bin/nano.original
+   sudo ln -s /usr/local/bin/edit /bin/nano
+   ```
+   
 
 # Change Ubuntu MotD (Message of the Day):
 1. Edit file
