@@ -62,6 +62,13 @@ Full Script:
    ```
 
 
+# WinDirStat using winget:
+```
+winget install -e --id WinDirStat.WinDirStat
+```
+
+
+
 # Global build number in TeamCity
 
 This solution works for me:
