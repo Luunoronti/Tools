@@ -69,6 +69,51 @@ winget install -e --id WinDirStat.WinDirStat
 
 
 
+# Windows 11 PowerShell 7, SSH
+
+```
+# Download and install PowerShell 7 silently
+$InstallerUrl = "https://github.com/PowerShell/PowerShell/releases/latest/download/PowerShell-7.4.2-win-x64.msi"
+$InstallerPath = "$env:TEMP\PowerShell7.msi"
+Invoke-WebRequest -Uri $InstallerUrl -OutFile $InstallerPath
+Start-Process msiexec.exe -ArgumentList "/i `"$InstallerPath`" /qn" -Wait
+Remove-Item $InstallerPath
+
+# Install OpenSSH Server
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+
+# Start and enable the SSH server
+Start-Service sshd
+Set-Service -Name sshd -StartupType 'Automatic'
+
+# Allow SSH in firewall
+if (-not (Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP" -ErrorAction SilentlyContinue)) {
+    New-NetFirewallRule -Name "OpenSSH-Server-In-TCP" -DisplayName "OpenSSH Server (sshd)" `
+        -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
+}
+
+# Set PowerShell 7 as default shell for SSH
+$pwshPath = "$env:ProgramFiles\PowerShell\7\pwsh.exe"
+$sshShellPath = "$env:ProgramData\ssh\sshd_config"
+
+# Update sshd_config with new default shell
+if (Test-Path $sshShellPath) {
+    # Backup current config
+    Copy-Item $sshShellPath "$sshShellPath.bak" -Force
+
+    # Replace or add the shell directive
+    $config = Get-Content $sshShellPath
+    $config = $config | Where-Object {$_ -notmatch "^ForceCommand"}
+    $config += "ForceCommand $pwshPath"
+    $config | Set-Content $sshShellPath
+}
+
+# Restart sshd to apply changes
+Restart-Service sshd
+
+```
+
+
 # Global build number in TeamCity
 
 This solution works for me:
