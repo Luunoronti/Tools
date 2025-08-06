@@ -83,7 +83,7 @@ Set-Service -Name sshd -StartupType 'Automatic'
 New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
 
 Copy-Item "$env:ProgramData\ssh\sshd_config" "$env:ProgramData\ssh\sshd_config.bak" -Force
-(Get-Content "$env:ProgramData\ssh\sshd_config" | Where-Object { $_ -notmatch "^ForceCommand" }) + "ForceCommand $env:ProgramFiles\PowerShell\7\pwsh.exe" | Set-Content "$env:ProgramData\ssh\sshd_config"
+(Get-Content "$env:ProgramData\ssh\sshd_config" | Where-Object { $_ -notmatch "^ForceCommand" }) + 'ForceCommand "C:\Program Files\PowerShell\7\pwsh.exe"' | Set-Content "$env:ProgramData\ssh\sshd_config"
 Restart-Service sshd
 
 ```
