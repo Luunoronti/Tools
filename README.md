@@ -71,7 +71,7 @@ winget install -e --id WinDirStat.WinDirStat
 
 # Windows 11 PowerShell 7, SSH
 
-``` PS
+``` powershell
 # Download and install PowerShell 7 silently
 $InstallerUrl = "https://github.com/PowerShell/PowerShell/releases/latest/download/PowerShell-7.4.2-win-x64.msi"
 $InstallerPath = "$env:TEMP\PowerShell7.msi"
