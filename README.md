@@ -17,6 +17,11 @@ Open scripts and such
     ```
     ./alpine-vm-setup-hyperv.sh
     ```
+# Rename via PS:
+```
+Rename-Computer -NewName "NewComputerName" -Force -Restart
+```
+
 
 # Windows Updates via PS:
 ``` powershell
