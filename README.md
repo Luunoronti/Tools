@@ -18,6 +18,16 @@ Open scripts and such
     ./alpine-vm-setup-hyperv.sh
     ```
 
+# Windows Updates via PS:
+``` powershell
+Install-Module -Name PSWindowsUpdate -Force
+Set-ExecutionPolicy -ExecutionPolicy Unrestricted
+Import-Module PSWindowsUpdate
+Get-WindowsUpdate
+Install-WindowsUpdate -AcceptAll -AutoReboot
+
+```
+
 # Microsoft Edit on Ubuntu:
 
 1. Download
