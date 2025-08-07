@@ -87,7 +87,7 @@ winget install -e --id WinDirStat.WinDirStat
 # Windows 11 PowerShell 7, SSH
 
 ``` powershell
-Invoke-WebRequest -Uri https://github.com/PowerShell/PowerShell/releases/latest/download/PowerShell-7.4.2-win-x64.msi -OutFile $env:TEMP\PowerShell7.msi
+Invoke-WebRequest -Uri https://github.com/PowerShell/PowerShell/releases/download/v7.5.2/PowerShell-7.5.2-win-x64.msi -OutFile $env:TEMP\PowerShell7.msi
 Start-Process msiexec.exe -ArgumentList "/i `"$env:TEMP\PowerShell7.msi`" /qn" -Wait
 Remove-Item $env:TEMP\PowerShell7.msi
 
