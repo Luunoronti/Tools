@@ -29,17 +29,107 @@ PowerShell 7
 winget install --id Microsoft.Powershell --source winget --accept-package-agreements --accept-source-agreements
 ```
 
+Set terminal to use PowerShell 7 as a default, restart Terminal.
 
+SSH Server
+```
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+Start-Service sshd
+Set-Service -Name sshd -StartupType 'Automatic'
+New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
+(Get-Content "$env:ProgramData\ssh\sshd_config" | Where-Object { $_ -notmatch "^ForceCommand" }) + 'ForceCommand "C:\Program Files\PowerShell\7\pwsh.exe"' | Set-Content "$env:ProgramData\ssh\sshd_config"
+Restart-Service sshd
+```
 
+Set user rights for SSHD
+```
+function Grant-Right($account, $right) {
+    $sid = (New-Object System.Security.Principal.NTAccount($account)).Translate([System.Security.Principal.SecurityIdentifier]).Value
+    $tmp = "$env:TEMP\secpol.inf"
+    $db  = "$env:TEMP\secpol.sdb"
 
+    secedit /export /cfg $tmp
+    (Get-Content $tmp) -replace "($right = .*)", "`$1,$sid" | Set-Content $tmp
+    secedit /import /db $db /cfg $tmp
+    secedit /configure /db $db /cfg $tmp /areas USER_RIGHTS
+    Remove-Item $tmp,$db -Force -ErrorAction SilentlyContinue
+}
 
+$user = "$env:USERDOMAIN\$env:USERNAME"
 
+Grant-Right $user "SeServiceLogonRight"
+Grant-Right $user "SeAssignPrimaryTokenPrivilege"
+Grant-Right $user "SeIncreaseQuotaPrivilege"
+Grant-Right $user "SeChangeNotifyPrivilege"
+Grant-Right $user "SeTcbPrivilege"
+```
 
+Reconfigure sshd service to run as current user
+``` 
+Stop-Service sshd
+$svc = Get-WmiObject Win32_Service -Filter "Name='sshd'"
+$svc.Change($null,$null,$null,$null,$null,$null,$user,$env:UserPassword)  # requires password
+Set-Service sshd -StartupType Automatic
+Start-Service sshd
+```
 
+Install Visual C++ Redistributables
+```
+$vcUrl = "https://aka.ms/vs/17/release/vc_redist.x64.exe"
+$vcExe = "$env:TEMP\vc_redist.x64.exe"
+Invoke-WebRequest $vcUrl -OutFile $vcExe
+Start-Process $vcExe -ArgumentList "/install /quiet /norestart" -Wait
+```
 
+windows update modules
+```
+Install-Module -Name PSWindowsUpdate -Force
+```
 
+WinDirStat
+```
+winget install -e --id WinDirStat.WinDirStat
+```
 
+7zip
+```
+winget install --id 7zip.7zip --source winget --accept-package-agreements --accept-source-agreements
+```
 
+.NET Framework 4.8 Developer Pack (SDK)
+```
+$url = "https://download.visualstudio.microsoft.com/download/pr/2f3b7a7f-1f5b-4a3a-9f5b-3e6c6c6f9b4f/6E2F2E6D6E2F2E6D6E2F2E6D6E2F2E6D/dotnetfx48devpack.exe"
+$exe = "$env:TEMP\dotnet48sdk.exe"
+Invoke-WebRequest $url -OutFile $exe
+Start-Process $exe -ArgumentList "/quiet /norestart" -Wait
+```
+
+Visual Studio 2022 Build Tools (Desktop development with C++)
+```
+$override = @(
+        "--quiet",
+        "--wait",
+        "--norestart",
+        "--nocache",
+        "--installPath", "C:\BuildTools",
+        "--add", "Microsoft.VisualStudio.Workload.NativeDesktop;includeRecommended",
+        "--add", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",                # MSVC v143
+        "--add", "Microsoft.VisualStudio.Component.VC.ATL",                           # ATL
+        "--add", "Microsoft.VisualStudio.Component.VC.CMake.Project",                 # CMake support
+        "--add", "Microsoft.VisualStudio.Component.VC.Llvm.ClangToolset",             # (opcjonalne) narzędzia LLVM/Clang
+        "--add", "Microsoft.VisualStudio.Component.VC.Runtimes.x64.Spectre",          # Spectre
+        "--add", "Microsoft.VisualStudio.Component.VC.Redist.14.Latest",              # Redistry
+        "--add", "Microsoft.VisualStudio.Component.Static.Analysis.Tools",            # Analyzers
+        "--add", "Microsoft.Component.MSBuild",
+        "--add", "Microsoft.VisualStudio.Component.NuGet",                            # NuGet
+        "--add", "Microsoft.VisualStudio.Component.Windows10SDK.19041"                # Win10 SDK headers/libs
+    )
+$overrideStr = $override -join " "
+
+winget install --id Microsoft.VisualStudio.2022.BuildTools -e --source winget `
+      --accept-package-agreements --accept-source-agreements `
+      --override $overrideStr
+```
 
 
 
