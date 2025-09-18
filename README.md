@@ -22,6 +22,29 @@ sudo ./intel <nic name, like eth0>
 ```
 
 
+
+# Install commands
+PowerShell 7
+```
+winget install --id Microsoft.Powershell --source winget --accept-package-agreements --accept-source-agreements
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Hyper-V toolset on Alpine Linux VM:
 
  1. Get script:
