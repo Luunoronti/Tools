@@ -130,7 +130,13 @@ Copy-Item -Path $src\* -Destination $dst -Recurse -Force
 ```
 
 
-
+Copy / install TeamCity agent and Horde Agent - this must be done on interactive session, no SSH
+```PowerShell
+copy \\dysk.plottwist.lan\Software\Tools\agentInstaller.exe c:\tools\
+C:\Tools\agentInstaller.exe
+copy \\dysk.plottwist.lan\Software\Tools\agentInstaller.exe c:\tools\
+C:\Tools\UnrealHordeAgent.msi
+```
 
 
 
