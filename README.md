@@ -26,7 +26,7 @@ sudo ./intel <nic name, like eth0>
 # Install commands
 
 ## Install packs using winget (PowerShell 7, WinDirStat, 7zip, Visual Studio 2022 Build Tools (Desktop development with C++), Windows SDK, .NET 6 SDK)
-```
+``` PowerShell
 winget install --id Microsoft.Powershell --source winget --accept-package-agreements --accept-source-agreements
 winget install -e --id WinDirStat.WinDirStat
 winget install --id 7zip.7zip --source winget --accept-package-agreements --accept-source-agreements
@@ -62,18 +62,19 @@ winget install --id Microsoft.DotNet.SDK.6 -e --source winget --accept-package-a
 Set terminal to use PowerShell 7 as a default, restart Terminal.
 
 ## windows update modules
-```
+``` PowerShell
 Install-Module -Name PSWindowsUpdate -Force
 ```
 
 ## SSH Server
 
 Run the following cmdlet to make sure that OpenSSH is available
-
 ``` PowerShell
 Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH*'
 ```
-```
+
+After that, run the following cmdlets to install the server as needed
+``` PowerShell
 Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
 Start-Service sshd
 Set-Service -Name sshd -StartupType 'Automatic'
@@ -82,8 +83,8 @@ New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled Tru
 Restart-Service sshd
 ```
 
-Set user rights for SSHD
-```
+Set user rights for SSHD (not tested)
+``` PowerShell
 function Grant-Right($account, $right) {
     $sid = (New-Object System.Security.Principal.NTAccount($account)).Translate([System.Security.Principal.SecurityIdentifier]).Value
     $tmp = "$env:TEMP\secpol.inf"
@@ -106,7 +107,7 @@ Grant-Right $user "SeTcbPrivilege"
 ```
 
 Reconfigure sshd service to run as current user
-``` 
+``` PowerShell
 Stop-Service sshd
 $svc = Get-WmiObject Win32_Service -Filter "Name='sshd'"
 $svc.Change($null,$null,$null,$null,$null,$null,$user,$env:UserPassword)  # requires password
@@ -115,7 +116,7 @@ Start-Service sshd
 ```
 
 Install Visual C++ Redistributables
-```
+``` PowerShell
 $vcUrl = "https://aka.ms/vs/17/release/vc_redist.x64.exe"
 $vcExe = "$env:TEMP\vc_redist.x64.exe"
 Invoke-WebRequest $vcUrl -OutFile $vcExe
@@ -124,7 +125,7 @@ Start-Process $vcExe -ArgumentList "/install /quiet /norestart" -Wait
 
 
 .NET Framework 4.8 Developer Pack (SDK)
-```
+``` PowerShell
 $url = "https://download.microsoft.com/download/8/1/8/81877d8b-a9b2-4153-9ad2-63a6441d11dd/NDP481-DevPack-ENU.exe"
 $exe = "$env:TEMP\dotnet48sdk.exe"
 Invoke-WebRequest $url -OutFile $exe
@@ -133,7 +134,7 @@ Start-Process $exe -ArgumentList "/quiet /norestart" -Wait
 
 
 Copying btop4win from $src to $dst
-```
+``` PowerShell
 $src = "\\dysk\Software\Tools\btop4win"
 $dst = "C:\tools\btop4win"
 New-Item -ItemType Directory -Path $dst -Force | Out-Null
