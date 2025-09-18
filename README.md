@@ -119,7 +119,7 @@ Start-Process $vcExe -ArgumentList "/install /quiet /norestart" -Wait
 
 .NET Framework 4.8 Developer Pack (SDK)
 ```
-$url = "https://download.visualstudio.microsoft.com/download/pr/2f3b7a7f-1f5b-4a3a-9f5b-3e6c6c6f9b4f/6E2F2E6D6E2F2E6D6E2F2E6D6E2F2E6D/dotnetfx48devpack.exe"
+$url = "https://download.microsoft.com/download/8/1/8/81877d8b-a9b2-4153-9ad2-63a6441d11dd/NDP481-DevPack-ENU.exe"
 $exe = "$env:TEMP\dotnet48sdk.exe"
 Invoke-WebRequest $url -OutFile $exe
 Start-Process $exe -ArgumentList "/quiet /norestart" -Wait
