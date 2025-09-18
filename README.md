@@ -25,7 +25,7 @@ sudo ./intel <nic name, like eth0>
 
 # Install commands
 
-Install packs using winget (PowerShell 7, WinDirStat, 7zip, Visual Studio 2022 Build Tools (Desktop development with C++), Windows SDK, .NET 6 SDK)
+## Install packs using winget (PowerShell 7, WinDirStat, 7zip, Visual Studio 2022 Build Tools (Desktop development with C++), Windows SDK, .NET 6 SDK)
 ```
 winget install --id Microsoft.Powershell --source winget --accept-package-agreements --accept-source-agreements
 winget install -e --id WinDirStat.WinDirStat
@@ -61,12 +61,18 @@ winget install --id Microsoft.DotNet.SDK.6 -e --source winget --accept-package-a
 
 Set terminal to use PowerShell 7 as a default, restart Terminal.
 
-windows update modules
+## windows update modules
 ```
 Install-Module -Name PSWindowsUpdate -Force
 ```
 
-SSH Server
+## SSH Server
+
+Run the following cmdlet to make sure that OpenSSH is available
+
+``` PowerShell
+Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH*'
+```
 ```
 Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
 Start-Service sshd
