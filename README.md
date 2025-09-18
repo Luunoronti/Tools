@@ -85,25 +85,18 @@ Restart-Service sshd
 
 Set user rights for SSHD (not tested)
 ``` PowerShell
-function Grant-Right($account, $right) {
-    $sid = (New-Object System.Security.Principal.NTAccount($account)).Translate([System.Security.Principal.SecurityIdentifier]).Value
-    $tmp = "$env:TEMP\secpol.inf"
-    $db  = "$env:TEMP\secpol.sdb"
+# Import Carbon
+Import-Module Carbon
 
-    secedit /export /cfg $tmp
-    (Get-Content $tmp) -replace "($right = .*)", "`$1,$sid" | Set-Content $tmp
-    secedit /import /db $db /cfg $tmp
-    secedit /configure /db $db /cfg $tmp /areas USER_RIGHTS
-    Remove-Item $tmp,$db -Force -ErrorAction SilentlyContinue
-}
+# Define your target account
+$user = "$env:COMPUTERNAME\$env:USERNAME"
 
-$user = "$env:USERDOMAIN\$env:USERNAME"
-
-Grant-Right $user "SeServiceLogonRight"
-Grant-Right $user "SeAssignPrimaryTokenPrivilege"
-Grant-Right $user "SeIncreaseQuotaPrivilege"
-Grant-Right $user "SeChangeNotifyPrivilege"
-Grant-Right $user "SeTcbPrivilege"
+# Grant the privileges
+Grant-CPrivilege -Identity $user -Privilege SeServiceLogonRight
+Grant-CPrivilege -Identity $user -Privilege SeAssignPrimaryTokenPrivilege
+Grant-CPrivilege -Identity $user -Privilege SeIncreaseQuotaPrivilege
+Grant-CPrivilege -Identity $user -Privilege SeChangeNotifyPrivilege
+Grant-CPrivilege -Identity $user -Privilege SeTcbPrivilege
 ```
 
 Reconfigure sshd service to run as current user
