@@ -24,12 +24,47 @@ sudo ./intel <nic name, like eth0>
 
 
 # Install commands
-PowerShell 7
+
+Install packs using winget (PowerShell 7, WinDirStat, 7zip, Visual Studio 2022 Build Tools (Desktop development with C++), Windows SDK, .NET 6 SDK)
 ```
 winget install --id Microsoft.Powershell --source winget --accept-package-agreements --accept-source-agreements
+winget install -e --id WinDirStat.WinDirStat
+winget install --id 7zip.7zip --source winget --accept-package-agreements --accept-source-agreements
+
+$override = @(
+        "--quiet",
+        "--wait",
+        "--norestart",
+        "--nocache",
+        "--installPath", "C:\BuildTools",
+        "--add", "Microsoft.VisualStudio.Workload.NativeDesktop;includeRecommended",
+        "--add", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",                # MSVC v143
+        "--add", "Microsoft.VisualStudio.Component.VC.ATL",                           # ATL
+        "--add", "Microsoft.VisualStudio.Component.VC.CMake.Project",                 # CMake support
+        "--add", "Microsoft.VisualStudio.Component.VC.Llvm.ClangToolset",             # (opcjonalne) narzędzia LLVM/Clang
+        "--add", "Microsoft.VisualStudio.Component.VC.Runtimes.x64.Spectre",          # Spectre
+        "--add", "Microsoft.VisualStudio.Component.VC.Redist.14.Latest",              # Redistry
+        "--add", "Microsoft.VisualStudio.Component.Static.Analysis.Tools",            # Analyzers
+        "--add", "Microsoft.Component.MSBuild",
+        "--add", "Microsoft.VisualStudio.Component.NuGet",                            # NuGet
+        "--add", "Microsoft.VisualStudio.Component.Windows10SDK.19041"                # Win10 SDK headers/libs
+    )
+$overrideStr = $override -join " "
+
+winget install --id Microsoft.VisualStudio.2022.BuildTools -e --source winget `
+      --accept-package-agreements --accept-source-agreements `
+      --override $overrideStr
+
+winget install --id Microsoft.WindowsSDK -e --source winget --accept-package-agreements --accept-source-agreements
+winget install --id Microsoft.DotNet.SDK.6 -e --source winget --accept-package-agreements --accept-source-agreements
 ```
 
 Set terminal to use PowerShell 7 as a default, restart Terminal.
+
+windows update modules
+```
+Install-Module -Name PSWindowsUpdate -Force
+```
 
 SSH Server
 ```
@@ -81,20 +116,6 @@ Invoke-WebRequest $vcUrl -OutFile $vcExe
 Start-Process $vcExe -ArgumentList "/install /quiet /norestart" -Wait
 ```
 
-windows update modules
-```
-Install-Module -Name PSWindowsUpdate -Force
-```
-
-WinDirStat
-```
-winget install -e --id WinDirStat.WinDirStat
-```
-
-7zip
-```
-winget install --id 7zip.7zip --source winget --accept-package-agreements --accept-source-agreements
-```
 
 .NET Framework 4.8 Developer Pack (SDK)
 ```
@@ -104,32 +125,15 @@ Invoke-WebRequest $url -OutFile $exe
 Start-Process $exe -ArgumentList "/quiet /norestart" -Wait
 ```
 
-Visual Studio 2022 Build Tools (Desktop development with C++)
-```
-$override = @(
-        "--quiet",
-        "--wait",
-        "--norestart",
-        "--nocache",
-        "--installPath", "C:\BuildTools",
-        "--add", "Microsoft.VisualStudio.Workload.NativeDesktop;includeRecommended",
-        "--add", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",                # MSVC v143
-        "--add", "Microsoft.VisualStudio.Component.VC.ATL",                           # ATL
-        "--add", "Microsoft.VisualStudio.Component.VC.CMake.Project",                 # CMake support
-        "--add", "Microsoft.VisualStudio.Component.VC.Llvm.ClangToolset",             # (opcjonalne) narzędzia LLVM/Clang
-        "--add", "Microsoft.VisualStudio.Component.VC.Runtimes.x64.Spectre",          # Spectre
-        "--add", "Microsoft.VisualStudio.Component.VC.Redist.14.Latest",              # Redistry
-        "--add", "Microsoft.VisualStudio.Component.Static.Analysis.Tools",            # Analyzers
-        "--add", "Microsoft.Component.MSBuild",
-        "--add", "Microsoft.VisualStudio.Component.NuGet",                            # NuGet
-        "--add", "Microsoft.VisualStudio.Component.Windows10SDK.19041"                # Win10 SDK headers/libs
-    )
-$overrideStr = $override -join " "
 
-winget install --id Microsoft.VisualStudio.2022.BuildTools -e --source winget `
-      --accept-package-agreements --accept-source-agreements `
-      --override $overrideStr
+Copying btop4win from $src to $dst
 ```
+$src = "\\dysk\Software\Tools\btop4win"
+$dst = "C:\tools\btop4win"
+New-Item -ItemType Directory -Path $dst -Force | Out-Null
+Copy-Item -Path $src\* -Destination $dst -Recurse -Force
+```
+
 
 
 
