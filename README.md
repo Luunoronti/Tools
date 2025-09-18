@@ -83,7 +83,7 @@ New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled Tru
 Restart-Service sshd
 ```
 
-Set user rights for SSHD (not tested)
+Set user rights for SSHD (note you need to change password in script, copy line by line)
 ``` PowerShell
 # Import Carbon
 Import-Module Carbon
@@ -97,14 +97,9 @@ Grant-CPrivilege -Identity $user -Privilege SeAssignPrimaryTokenPrivilege
 Grant-CPrivilege -Identity $user -Privilege SeIncreaseQuotaPrivilege
 Grant-CPrivilege -Identity $user -Privilege SeChangeNotifyPrivilege
 Grant-CPrivilege -Identity $user -Privilege SeTcbPrivilege
-```
 
-Reconfigure sshd service to run as current user
-``` PowerShell
 Stop-Service sshd
-$svc = Get-WmiObject Win32_Service -Filter "Name='sshd'"
-$svc.Change($null,$null,$null,$null,$null,$null,$user,$env:UserPassword)  # requires password
-Set-Service sshd -StartupType Automatic
+sc.exe config sshd obj= $user password= "PlainTextPassword"
 Start-Service sshd
 ```
 
