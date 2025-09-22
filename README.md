@@ -66,6 +66,11 @@ Set terminal to use PowerShell 7 as a default, restart Terminal.
 Install-Module -Name PSWindowsUpdate -Force
 ```
 
+## Nuget source
+```
+dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
+```
+
 ## SSH Server
 
 Run the following cmdlet to make sure that OpenSSH is available
