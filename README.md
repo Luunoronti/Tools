@@ -68,8 +68,13 @@ Install-Module -Name PSWindowsUpdate -Force
 ```
 
 ## Nuget source
-```
+``` PowerShell
 dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
+```
+
+## Long file names
+``` PowerShell
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name "LongPathsEnabled" -Value 1
 ```
 
 ## SSH Server
