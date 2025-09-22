@@ -24,7 +24,7 @@ sudo ./intel <nic name, like eth0>
 
 
 # Install commands
-> It may be reuired tp restart Terminal at each step.
+> It may be reuired to restart Terminal at each step.
 
 ## Install packs using winget (PowerShell 7, WinDirStat, 7zip, Visual Studio 2022 Build Tools (Desktop development with C++), Windows SDK, .NET 6 SDK)
 ``` PowerShell
