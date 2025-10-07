@@ -2,11 +2,14 @@
 Open scripts and such
 
 
-# Unlock Inte 520 NICs:
+# Unlock Intel 520 NICs:
+
+https://gist.github.com/ixs/dbaac42730dea9bd124f26cbd439c58e
 
 1. Download file:
 ```
 curl -L -o intel https://gist.githubusercontent.com/jeffangelion/e7736a0802d4782d5e3d4d2e08e8306b/raw/b2e6710c22922c27b1b23ff4d8d7c1f88c265469/intel_x520_patcher-sh
+
 ```
 3. Make it executable
 ```
